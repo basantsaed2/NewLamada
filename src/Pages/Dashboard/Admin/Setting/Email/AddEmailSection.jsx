@@ -33,7 +33,7 @@ const AddEmailSection = ({ setUpdate }) => {
       return;
     }
 
-    const finalUrl = `https://Lamadafood.food2go.online/admin/settings/business_setup/order_delay_notification/add?email=${encodeURIComponent(email.trim())}`;
+    const finalUrl = `https://Lamadafoodbcknd.food2go.online/admin/settings/business_setup/order_delay_notification/add?email=${encodeURIComponent(email.trim())}`;
 
     const bodyData = new URLSearchParams();
     bodyData.append("name", name.trim());

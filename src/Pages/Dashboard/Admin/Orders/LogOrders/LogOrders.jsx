@@ -16,7 +16,7 @@ const LogOrders = () => {
     setLoading(true);
     axios({
       method: "post",
-      url: `https://Lamadafood.food2go.online/admin/order/log?order_id=${id}`,
+      url: `https://Lamadafoodbcknd.food2go.online/admin/order/log?order_id=${id}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer 136|oxbdg9QVDeaeSETkO9y1Rurk1mZZFE3ywuZaTLMM0b11e7e1",

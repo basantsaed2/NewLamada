@@ -22,7 +22,7 @@ export default function ToggleItems({ id }) {
     const fetchBranches = async () => {
       try {
         const response = await axios.get(
-          `https://Lamadafood.food2go.online/admin/branch/branch_in_product/${id}`,
+          `https://Lamadafoodbcknd.food2go.online/admin/branch/branch_in_product/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -65,7 +65,7 @@ export default function ToggleItems({ id }) {
 
     try {
       await axios.put(
-        `https://Lamadafood.food2go.online/admin/branch/branch_product_status/${id}`,
+        `https://Lamadafoodbcknd.food2go.online/admin/branch/branch_product_status/${id}`,
         { branch_id, status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
