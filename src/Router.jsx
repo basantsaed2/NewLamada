@@ -72,6 +72,7 @@ import {
   ScheduleTimeLayout,
   EditScheduleTimeLayout,
   RefundOrdersLayout,
+  CancelationNotificationLayout,
 } from "./layouts/Layouts";
 import ProtectedLogin from "./ProtectedData/ProtectedLogin";
 import NotFoundPage from "./Pages/NotFoundPage/NotFoundPage";
@@ -79,6 +80,10 @@ import App from "./App";
 import { BusinessSettingsPage, CustomerLoginPage, EditRolePage, MainBranchSetupPage, OrdersPage, OrdersPaymentHistoryPage, OrdersPaymentPendingPage, RestaurantTimeSlotPage } from "./Pages/Pages";
 import LogOrders from "./Pages/Dashboard/Admin/Orders/LogOrders/LogOrders";
 import EditEmailPage from "./Pages/Dashboard/Admin/Setting/Email/EditEmail";
+import GroupLayout from "./layouts/Dashboard/Setting/Group/GroupLayout";
+import EditGroupLayout from "./layouts/Dashboard/Setting/Group/EditGroupLayout";
+import ExtraLayout from "./layouts/Dashboard/Setting/Extra/ExtraLayout";
+import EditExtraLayout from "./layouts/Dashboard/Setting/Extra/EditExtraLayout";
 //import ToggleItems from "./Pages/Dashboard/Admin/ProductSetup/ToggleItems";
 
 const ProductSetupLayout = () => {
@@ -374,6 +379,33 @@ export const router = createBrowserRouter([
                 ]
               },
               {
+                path: 'groups',
+                children: [
+                  {
+                    path: '',
+                    element: <GroupLayout />,
+                  },
+                  {
+                    path: 'edit/:groupId',
+                    element: <EditGroupLayout />,
+                  },
+                  {
+                    path: 'view/:groupExtraId',
+                    element: <Outlet />,
+                    children: [
+                      {
+                        path: "",
+                        element: <ExtraLayout />
+                      },
+                      {
+                        path: 'edit/:groupEditExtraId',
+                        element: <EditExtraLayout />,
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
                 path: 'order_type',
                 element: <OrderTypeLayout />,
               },
@@ -392,6 +424,10 @@ export const router = createBrowserRouter([
               {
                 path: 'sound',
                 element: <SongLayout />,
+              },
+              {
+                path: 'cancelation_notification',
+                element: <CancelationNotificationLayout />,
               },
             ]
           },

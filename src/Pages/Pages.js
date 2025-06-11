@@ -65,6 +65,17 @@ export { default as ResturantTimePage } from "./Dashboard/Admin/Setting/Resturan
 export { default as CancelTimePage } from "./Dashboard/Admin/Setting/CancelTime/CancelPage";
 // Setting -> Delivery Time
 export { default as DeliveryTimePage } from "./Dashboard/Admin/Setting/DeliveryTime/DeliveryTimePage";
+//CancelationNotification
+export { default as CancelationNotificationPage } from "./Dashboard/Admin/Setting/CancelationNotification/CancelationNotificationPage";
+// Setting -> Group
+export { default as GroupPage } from "./Dashboard/Admin/Setting/Group/GroupPage";
+export { default as AddGroupPage } from "./Dashboard/Admin/Setting/Group/AddGroupPage";
+export { default as EditGroupPage } from "./Dashboard/Admin/Setting/Group/EditGroupPage";
+// Setting -> Group Extra
+export { default as ExtraPage } from "./Dashboard/Admin/Setting/Extra/ExtraPage";
+export { default as AddExtraPage } from "./Dashboard/Admin/Setting/Extra/AddExtraPage";
+export { default as EditExtraPage } from "./Dashboard/Admin/Setting/Extra/EditExtraPage";
+
 /* Texes */
 // Texes -> Taxes
 export { default as TaxesPage } from "./Dashboard/Admin/Taxes/TaxesPage";
@@ -141,3 +152,4 @@ export { default as FailedOrdersPage } from "./Dashboard/Admin/Orders/FailedOrde
 export { default as CanceledOrdersPage } from "./Dashboard/Admin/Orders/CanceledOrders/CanceledOrdersPage";
 export { default as ScheduleOrdersPage } from "./Dashboard/Admin/Orders/ScheduleOrders/ScheduleOrdersPage";
 export { default as RefundOrdersPage } from "./Dashboard/Admin/Orders/RefundOrders/RefundOrdersPage";
+

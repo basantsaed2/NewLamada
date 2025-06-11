@@ -112,6 +112,7 @@ const ScheduleOrdersPage = () => {
               'Customer Info',
               'Branch',
               "Total Amount",
+              "Payment Method",
               'Order Status',
               "Operations Status",
               "Operations Admin",
@@ -272,6 +273,12 @@ const ScheduleOrdersPage = () => {
                                                                                     {/* Order Amount */}
                                                                                     <td className="px-4 py-2 text-center text-thirdColor text-sm lg:text-base">
                                                                                            {order?.amount || 0}
+                                                                                    </td>
+
+
+                                                                                    {/* Order Payment */}
+                                                                                    <td className="px-4 py-2 text-center text-thirdColor text-sm lg:text-base">
+                                                                                           {order?.payment_method?.name || 0}
                                                                                     </td>
                                                                                     {/* Order Status */}
                                                                                     <td className="px-4 py-2 text-center">

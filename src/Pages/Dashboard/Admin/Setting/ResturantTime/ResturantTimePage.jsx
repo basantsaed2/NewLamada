@@ -7,6 +7,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useAuth } from '../../../../../Context/Auth';
+import { useTranslation } from 'react-i18next';
+
 const RestaurantTimeSlotPage = ({ refetch }) => {
   const auth = useAuth();
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -17,6 +19,8 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
     hours: '',
     branch_id: null
   });
+                   const {  t,i18n } = useTranslation();
+
   const [editingSlot, setEditingSlot] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
@@ -91,9 +95,9 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
   };
 
   const validateTimeSlot = (slot) => {
-    if (!slot.from) return 'Opening time is required';
-    if (!slot.hours || isNaN(parseInt(slot.hours, 10))) return 'Valid number of hours is required';
-    if (!slot.branch_id || isNaN(slot.branch_id)) return 'Branch selection is required';
+    if (!slot.from) return t('Opening time is required');
+    if (!slot.hours || isNaN(parseInt(slot.hours, 10))) return t('Valid number of hours is required');
+    if (!slot.branch_id || isNaN(slot.branch_id)) return t('Branch selection is required');
     return null;
   };
 
@@ -126,9 +130,9 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
         branch,
         id: response.id // Use server-generated ID
       }]);
-      auth.toastSuccess('Branch Time added and saved to server');
+      auth.toastSuccess(t('Branch Time added and saved to server'));
     } else {
-      throw new Error('No ID returned from server');
+      throw new Error(t('No ID returned from server'));
     }
     setNewTimeSlot({ from: '', hours: '', branch_id: null });
   };
@@ -163,7 +167,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
         setTimeSlots(timeSlots.map(slot =>
           slot.id === editingSlot.id ? updatedSlot : slot
         ));
-        auth.toastSuccess('Branch Time updated successfully');
+        auth.toastSuccess(t('Branch Time updated successfully'));
       }
     }
     setShowEditDialog(false);
@@ -175,7 +179,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
   const handleSubmitTimeSlots = async (e) => {
     e.preventDefault();
     if (timeSlots.length === 0) {
-      auth.toastError('Please add at least one Branch Time');
+      auth.toastError(t("'Please add at least one Branch Time'"));
       return;
     }
 
@@ -230,7 +234,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
   const handleSubmitCustomDays = async (e) => {
     e.preventDefault();
     if (optionName !== 'customize' || selectedDays.length === 0) {
-      auth.toastError('Please select at least one day in customize mode');
+      auth.toastError(t('Please select at least one day in customize mode'));
       return;
     }
 
@@ -239,7 +243,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
       await postCustom({
         custom: selectedDays.map(day => day.name)
       });
-      auth.toastSuccess('Custom days saved successfully');
+      auth.toastSuccess(t('Custom days saved successfully'));
       refetchTimeSlot();
     } catch (error) {
       console.error('Submit custom days error:', error);
@@ -261,45 +265,45 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
     <>
       <Toast ref={toast} />
       {loadingTime || loadingTimeSlot || loadingCustom ? (
-        <div className="w-full h-56 flex justify-center items-center">
+        <div className="flex items-center justify-center w-full h-56">
           <LoaderLogin />
         </div>
       ) : (
-        <div className="w-full flex flex-col items-start gap-4">
+        <div className="flex flex-col items-start w-full gap-4">
           {/* <TitleSection text={'Restaurant Operating Hours'} /> */}
 
-          <div className="w-full flex gap-8 mt-4">
+          <div className="flex w-full gap-8 mt-4">
             <span
               className={`text-xl font-TextFontRegular cursor-pointer ${optionName === 'daily' ? 'text-mainColor' : 'text-thirdColor'}`}
               onClick={() => setOptionName('daily')}
             >
-              Daily
+              {t("Daily")}
             </span>
             <span
               className={`text-xl font-TextFontRegular cursor-pointer ${optionName === 'customize' ? 'text-mainColor' : 'text-thirdColor'}`}
               onClick={() => setOptionName('customize')}
             >
-              Customize
+              {t("Customize")}
             </span>
           </div>
 
           {optionName === 'daily' &&
             <div className="w-full mt-6">
-              <h3 className="text-xl font-semibold mb-4">Branch Times</h3>
+              <h3 className="mb-4 text-xl font-semibold">{t("Branch Times")}</h3>
 
               {timeSlots.length === 0 ? (
-                <div className="text-center py-4 text-gray-500">
-                  No Branch Times configured yet
+                <div className="py-4 text-center text-gray-500">
+                  {t("No Branch Times configured yet")}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-3">
                   {timeSlots.map((slot, index) => (
-                    <div key={slot.id || slot.tempId} className="border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start">
+                    <div key={slot.id || slot.tempId} className="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-md">
+                      <div className="flex items-start justify-between">
                         <div>
                           <p className="font-semibold">{slot.branch?.name || 'Branch Not Selected'}</p>
-                          <p>From: {slot.from}</p>
-                          <p>Hours: {slot.hours}</p>
+                          <p>{t("From")}: {slot.from}</p>
+                          <p>{t("Hours")}: {slot.hours}</p>
                         </div>
                         <div className="flex gap-2">
                           <button
@@ -308,7 +312,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                             className="text-red-500 hover:text-red-700"
                             disabled={isSubmittingTimeSlots || loadingTimeSlot}
                           >
-                            Edit
+                            {t("Edit")}
                           </button>
                         </div>
                       </div>
@@ -317,11 +321,11 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                 </div>
               )}
 
-              <div className="w-full bg-gray-50 p-4 rounded-lg">
-                <h4 className="text-lg font-medium mb-3">Add New Branch Time</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="w-full p-4 rounded-lg bg-gray-50">
+                <h4 className="mb-3 text-lg font-medium">{t("Add New Branch Time")}</h4>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Branch *</label>
+                    <label className="block mb-1 text-sm font-medium text-gray-700">{t("Branch *")}</label>
                     <Dropdown
                       value={newTimeSlot.branch_id}
                       options={branches.map(branch => ({
@@ -332,13 +336,13 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                         ...newTimeSlot,
                         branch_id: e.value
                       })}
-                      placeholder="Select Branch"
+                      placeholder={t("Select Branch")}
                       className="w-full"
                       disabled={isSubmittingTimeSlots || loadingTimeSlot}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Opening Time *</label>
+                    <label className="block mb-1 text-sm font-medium text-gray-700">{t("Opening Time *")}</label>
                     <TimeInput
                       value={newTimeSlot.from}
                       onChange={(e) => setNewTimeSlot({
@@ -350,14 +354,14 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Hours *</label>
+                    <label className="block mb-1 text-sm font-medium text-gray-700">{t("Hours *")}</label>
                     <NumberInput
                       value={newTimeSlot.hours}
                       onChange={(e) => setNewTimeSlot({
                         ...newTimeSlot,
                         hours: e.target.value
                       })}
-                      placeholder="Enter number of hours"
+                      placeholder={t("Enter number of hours")}
                       className="w-full"
                       disabled={isSubmittingTimeSlots || loadingTimeSlot}
                     />
@@ -366,31 +370,31 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                 <button
                   type="button"
                   onClick={handleAddTimeSlot}
-                  className="mt-4 px-4 py-2 bg-mainColor text-white rounded hover:bg-red-700 disabled:bg-gray-400"
+                  className="px-4 py-2 mt-4 text-white rounded bg-mainColor hover:bg-red-700 disabled:bg-gray-400"
                   disabled={isSubmittingTimeSlots || loadingTimeSlot}
                 >
-                  {loadingTimeSlot ? 'Saving...' : 'Add Branch Time'}
+                  {loadingTimeSlot ?t("Saving") :t('Add Branch Time')}
                 </button>
               </div>
             </div>
           }
 
           {optionName === 'customize' && (
-            <div className="w-full flex flex-col items-start gap-y-1 mt-3">
-              <span className="text-xl text-thirdColor">Select Days:</span>
+            <div className="flex flex-col items-start w-full mt-3 gap-y-1">
+              <span className="text-xl text-thirdColor">{t('SelectDays')}:</span>
               <MultiSelect
                 value={selectedDays}
                 onChange={(e) => setSelectedDays(e.value)}
                 options={days}
                 optionLabel="name"
-                placeholder="Select Days"
+                placeholder={t('SelectDays')}
                 filter
                 className="w-full md:w-1/2"
                 disabled={isSubmittingCustom}
               />
               <div className="mt-4">
                 <SubmitButton
-                  text={isSubmittingCustom ? 'Saving Days...' : 'Save Custom Days'}
+                  text={isSubmittingCustom ? t('Saving Days...') : t('Save Custom Days')}
                   rounded="rounded-full"
                   handleClick={handleSubmitCustomDays}
                   disabled={isSubmittingCustom || loadingTimeSlot}
@@ -401,7 +405,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
 
 
 
-          {/* <div className="w-full flex items-center justify-end gap-x-4 mt-6">
+          {/* <div className="flex items-center justify-end w-full mt-6 gap-x-4">
                         <StaticButton
                             text={'Reset'}
                             handleClick={handleReset}
@@ -429,7 +433,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
             {editingSlot && (
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Branch *</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">{t("Branch *")}</label>
                   <Dropdown
                     value={editingSlot.branch_id}
                     options={branches.map(branch => ({
@@ -445,7 +449,7 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Opening Time *</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">{t("Opening Time *")}</label>
                   <TimeInput
                     value={editingSlot.from}
                     onChange={(e) => setEditingSlot({
@@ -457,14 +461,14 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Hours *</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">{t("Hours *")}</label>
                   <NumberInput
                     value={editingSlot.hours}
                     onChange={(e) => setEditingSlot({
                       ...editingSlot,
                       hours: e.target.value
                     })}
-                    placeholder="Enter number of hours"
+                    placeholder={t("Enter number of hours")}
                     className="w-full"
                     disabled={isSubmittingTimeSlots || loadingTimeSlot}
                   />
@@ -479,15 +483,15 @@ const RestaurantTimeSlotPage = ({ refetch }) => {
                     className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:bg-gray-200"
                     disabled={isSubmittingTimeSlots || loadingTimeSlot}
                   >
-                    Cancel
+                    {t("Cancel")}
                   </button>
                   <button
                     type="button"
                     onClick={handleUpdateSlot}
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-red-300"
+                    className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600 disabled:bg-red-300"
                     disabled={isSubmittingTimeSlots || loadingTimeSlot}
                   >
-                    {isSubmittingTimeSlots || loadingTimeSlot ? 'Updating...' : 'Update'}
+                    {isSubmittingTimeSlots || loadingTimeSlot ? t('Updating...') : t('Update')}
                   </button>
                 </div>
               </div>
